@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>House Price Predictor</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #cbd5e1; }
+
+        /* Animations */
+        .fade-in { animation: fadeIn 0.6s ease-out forwards; opacity: 0; transform: translateY(20px); }
+        @keyframes fadeIn { to { opacity: 1; transform: translateY(0); } }
+
+        /* Section Logic */
+        .section-content { display: none; }
+        .section-content.active { display: block; }
+
+        /* Active Nav Link */
+        .nav-link.active { color: #ffbb00; } /* Amber-400 */
+        .nav-link { position: relative; }
+        .nav-link::after {
+            content: ''; position: absolute; width: 0; height: 2px; bottom: -4px; left: 0;
+            background-color: #ffbb00; transition: width 0.3s;
+        }
+        .nav-link.active::after { width: 100%; }
+
+        /* Contact Form Specifics */
+        .contact-input {
+            background-color: transparent;
+            border: 1px solid #cbd5e1;
+            border-radius: 0.375rem; /* rounded-md */
+            transition: all 0.2s;
+        }
+        .contact-input:focus {
+            border-color: #c7ffff;
+            box-shadow: 0 0 0 1px #c7ffff;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <!-- Navigation Bar -->
+    <nav class="fixed w-full z-50 transition-all duration-300 bg-gray-900/95 backdrop-blur-md shadow-lg" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <div class="flex items-center">
+                    <i class="fas fa-home text-white text-2xl mr-3"></i>
+                    <span class="text-white text-xl font-bold tracking-wider">
+                        House Price<span class="text-blue-500">Prediction</span>
+                    </span>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-8">
+                        <button onclick="showSection('home')" class="nav-link active text-gray-300 hover:text-white px-1 py-2 text-sm font-medium transition-colors">HOME</button>
+                        <button onclick="showSection('predict')" class="nav-link text-gray-300 hover:text-white px-1 py-2 text-sm font-medium transition-colors">VALUATION TOOL</button>
+                        <button onclick="showSection('about')" class="nav-link text-gray-300 hover:text-white px-1 py-2 text-sm font-medium transition-colors">ABOUT</button>
+                        <button onclick="showSection('contact')" class="nav-link text-gray-300 hover:text-white px-1 py-2 text-sm font-medium transition-colors">CONTACT</button>
+                    </div>
+                </div>
+                <!-- Mobile menu button -->
+                <div class="-mr-2 flex md:hidden">
+                    <button type="button" class="text-gray-400 hover:text-white focus:outline-none p-2" onclick="document.getElementById('mobile-menu').classList.toggle('hidden')">
+                        <i class="fas fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div class="hidden md:hidden bg-gray-900 border-t border-gray-800" id="mobile-menu">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <button onclick="showSection('home')" class="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium w-full text-left">Home</button>
+                <button onclick="showSection('predict')" class="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium w-full text-left">Valuation Tool</button>
+                <button onclick="showSection('about')" class="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium w-full text-left">About</button>
+                <button onclick="showSection('contact')" class="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium w-full text-left">Contact</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main>
+
+        <!-- ================= HOME SECTION ================= -->
+        <section id="home-section" class="section-content active h-screen relative bg-gray-900 overflow-hidden">
+            <div class="absolute inset-0 z-0">
+                <img src="https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80" alt="City Skyline" class="w-full h-full object-cover opacity-50">
+                <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/60 to-transparent"></div>
+            </div>
+
+            <div class="relative z-10 flex flex-col items-center justify-center h-full text-center px-4 fade-in">
+                <div class="inline-block px-4 py-1 mb-6 border border-blue-400 rounded-full bg-blue-500/10 backdrop-blur-sm">
+                    <span class="text-blue-400 text-sm font-semibold tracking-wide uppercase">AI-Powered Analytics</span>
+                </div>
+                <h1 class="text-5xl md:text-7xl font-bold text-white mb-6 tracking-tight drop-shadow-xl">
+                    Real Estate<br><span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300">Intelligent Prediction</span>
+                </h1>
+                <p class="text-gray-300 max-w-2xl mb-10 text-lg md:text-xl font-light leading-relaxed">
+                    Leverage advanced machine learning algorithms to get instant, accurate property valuations based on historical market data.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <button onclick="showSection('predict')" class="px-8 py-4 bg-blue-600 text-white text-lg font-semibold rounded-lg shadow-lg shadow-blue-600/30 hover:bg-blue-700 transition-all transform hover:-translate-y-1">
+                        Start Valuation
+                    </button>
+                    <button onclick="showSection('about')" class="px-8 py-4 bg-white/10 backdrop-blur-md text-white text-lg font-semibold rounded-lg border border-white/20 hover:bg-white/20 transition-all">
+                        Learn More
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= PREDICT SECTION (New Design) ================= -->
+        <section id="predict-section" class="section-content min-h-screen pt-28 pb-12 bg-gray-50">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 fade-in">
+                
+                <div class="text-center mb-10">
+                    <h2 class="text-3xl md:text-4xl font-extrabold text-slate-800">Property Valuation Tool</h2>
+                    <p class="text-gray-500 mt-3 text-lg">Enter the property details below to get an instant market estimate powered by Machine Learning.</p>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100 p-6 md:p-10">
+                    <div class="flex flex-col lg:flex-row gap-12">
+                        
+                        <!-- Left Side: Form -->
+                        <div class="w-full lg:w-7/12">
+                            <form id="prediction-form" onsubmit="handlePredict(event)" class="space-y-6">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    
+                                    <!-- Input Group: Location -->
+                                    <div class="col-span-2">
+                                        <label class="block text-sm font-semibold text-gray-700 mb-2">Location / Area Name</label>
+                                        <div class="relative">
+                                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                                <i class="fas fa-map-marker-alt text-gray-400"></i>
+                                            </div>
+                                            <input type="text" name="location" required placeholder="e.g. Baner, Wakad" 
+                                                class="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all text-gray-700 bg-gray-50 focus:bg-white">
+                                        </div>
+                                    </div>
+
+                                    <!-- Input Group: Sq Footage -->
+                                    <div>
+                                        <label class="block text-sm font-semibold text-gray-700 mb-2">Total Sq Footage</label>
+                                        <input type="number" name="area" required placeholder="e.g. 1500" 
+                                            class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all text-gray-700 bg-gray-50 focus:bg-white">
+                                    </div>
+
+                                    <!-- Input Group: Bedrooms -->
+                                    <div>
+                                        <label class="block text-sm font-semibold text-gray-700 mb-2">Bedrooms</label>
+                                        <input type="number" name="bedrooms" required placeholder="e.g. 3" 
+                                            class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all text-gray-700 bg-gray-50 focus:bg-white">
+                                    </div>
+
+                                    
+
+                                    <!-- Input Group: Kitchens -->
+                                    <div>
+                                        <label class="block text-sm font-semibold text-gray-700 mb-2">Kitchens</label>
+                                        <input type="number" name="kitchen" required placeholder="e.g. 1" 
+                                            class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all text-gray-700 bg-gray-50 focus:bg-white">
+                                    </div>
+
+                                    <!-- Input Group: Distance Code -->
+                                    <div>
+                                        <label class="block text-sm font-semibold text-gray-700 mb-2">Distance Code / Pincode</label>
+                                        <input type="number" name="dist_code" required placeholder="e.g. 411045" 
+                                            class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all text-gray-700 bg-gray-50 focus:bg-white">
+                                    </div>
+
+                                    
+
+                                    <!-- Input Group: District -->
+                                    <div class="col-span-2">
+                                        <label class="block text-sm font-semibold text-gray-700 mb-2">District Category</label>
+                                        <select name="district" class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all text-gray-700 bg-gray-50 focus:bg-white cursor-pointer">
+                                            <option value="1">District 1 (Central)</option>
+                                            <option value="2">District 2 (Suburban)</option>
+                                            <option value="3">District 3 (Peripheral)</option>
+                                            <option value="4">District 4 (Industrial)</option>
+                                            <option value="5">District 5 (Rural)</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="pt-4">
+                                    <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-6 rounded-xl transition-all shadow-lg hover:shadow-blue-500/30 flex justify-center items-center group">
+                                        <span id="btn-text" class="text-lg">Calculate Estimated Value</span>
+                                        <i class="fas fa-arrow-right ml-3 group-hover:translate-x-1 transition-transform"></i>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- Right Side: Result Box -->
+                        <div class="w-full lg:w-5/12 flex flex-col">
+                            <div class="h-full bg-blue-50 border-2 border-dashed border-blue-200 rounded-2xl p-8 flex flex-col items-center justify-center text-center relative overflow-hidden">
+                                <!-- Background Icon Decoration -->
+                                <i class="fas fa-calculator text-blue-100 text-9xl absolute -bottom-10 -right-10 transform rotate-12"></i>
+                                
+                                <div class="relative z-10">
+                                    <div class="w-16 h-16 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center mx-auto mb-6 text-3xl shadow-sm">
+                                        <i class="fas fa-calculator"></i>
+                                    </div>
+                                    <h3 class="text-xl font-medium text-gray-600 mb-2">Estimated Price</h3>
+                                    <div id="price-display" class="text-5xl lg:text-6xl font-extrabold text-blue-700 my-4 tracking-tight">
+                                        $0.00
+                                    </div>
+                                    <p class="text-xs text-gray-400 max-w-xs mx-auto mt-4 italic">
+                                        Note: This is a model-generated estimate for informational purposes based on current market trends.
+                                    </p>
+                                    
+                                    <!-- Error Message Container -->
+                                    <div id="error-box" class="hidden mt-4 p-3 bg-red-100 text-red-700 rounded-lg text-sm font-medium">
+                                        <i class="fas fa-exclamation-circle mr-1"></i> <span id="error-message">Error</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= ABOUT SECTION ================= -->
+        <section id="about-section" class="section-content min-h-screen pt-28 pb-12 bg-white">
+            <div class="max-w-4xl mx-auto px-6 fade-in">
+                <div class="mb-12 border-l-4 border-blue-500 pl-6">
+                    <h2 class="text-3xl font-bold text-gray-900 mb-2">About The Project</h2>
+                    <p class="text-gray-500">Understanding the technology behind the predictions.</p>
+                </div>
+                
+                <div class="prose prose-lg text-gray-600 mb-12">
+                    <p>
+                        This is a machine learning based website which predicts the price of the house in city's based on various parameters like location, carpet area, number of bedrooms, etc. It uses historical data collected from various real estate portals to provide accurate estimations.
+                    </p>
+                </div>
+
+                <div class="bg-gray-50 rounded-2xl p-8 border border-gray-100">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-6">How to use</h3>
+                    <div class="space-y-6">
+                        <div class="flex">
+                            <div class="flex-shrink-0 h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold border border-blue-200">1</div>
+                            <div class="ml-4">
+                                <h4 class="text-lg font-semibold text-gray-900">Navigate</h4>
+                                <p class="text-gray-500 text-sm">Go to the "Valuation Tool" section from the menu.</p>
+                            </div>
+                        </div>
+                        <div class="flex">
+                            <div class="flex-shrink-0 h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold border border-blue-200">2</div>
+                            <div class="ml-4">
+                                <h4 class="text-lg font-semibold text-gray-900">Input Data</h4>
+                                <p class="text-gray-500 text-sm">Fill in the details like Area, Location, and Amenities.</p>
+                            </div>
+                        </div>
+                        <div class="flex">
+                            <div class="flex-shrink-0 h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold border border-blue-200">3</div>
+                            <div class="ml-4">
+                                <h4 class="text-lg font-semibold text-gray-900">Get Result</h4>
+                                <p class="text-gray-500 text-sm">Click calculate and view the estimated price instantly.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= CONTACT SECTION (New Design) ================= -->
+        <section id="contact-section" class="section-content min-h-screen flex items-center justify-center p-4 bg-gray-100 pt-20">
+            <!-- Lavender Background Container -->
+            <div class="bg-[#efe9f5] w-full max-w-6xl rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col md:flex-row min-h-[600px] fade-in mx-auto">
+                
+                <!-- Left Side: Form -->
+                <div class="w-full md:w-1/2 p-8 md:p-14 flex flex-col justify-center">
+                    <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-8 tracking-tight">Contact form</h2>
+                    
+                    <form class="space-y-5">
+                        <!-- Name -->
+                        <div>
+                            <label class="block text-sm font-bold text-gray-800 mb-1">Name</label>
+                            <input type="text" class="contact-input w-full px-4 py-3 outline-none" placeholder="Your Name">
+                        </div>
+
+                        <!-- Addresses -->
+                        <div>
+                            <label class="block text-sm font-bold text-gray-800 mb-1">Street address</label>
+                            <input type="text" class="contact-input w-full px-4 py-3 outline-none" placeholder="123 Main St">
+                        </div>
+                        
+
+                        <!-- City State Zip -->
+                        <div class="grid grid-cols-5 gap-3">
+                            <div class="col-span-2">
+                                <label class="block text-xs font-bold text-gray-600 mb-1">City</label>
+                                <input type="text" class="contact-input w-full px-3 py-3 outline-none text-sm">
+                            </div>
+                            <div class="col-span-1">
+                                <label class="block text-xs font-bold text-gray-600 mb-1">State</label>
+                                <div class="relative">
+                                    <select class="contact-input w-full px-1 py-3 outline-none text-sm appearance-none bg-transparent text-center">
+                                        <option>-</option>
+                                        <option>MH</option>
+                                    </select>
+                                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-1 text-gray-700">
+                                        <i class="fas fa-caret-down text-xs"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-span-2">
+                                <label class="block text-xs font-bold text-gray-600 mb-1">Zip code</label>
+                                <input type="text" class="contact-input w-full px-3 py-3 outline-none text-sm">
+                            </div>
+                        </div>
+
+                        <!-- Country -->
+                        <div>
+                            <label class="block text-sm font-bold text-gray-800 mb-1">Country</label>
+                            <div class="relative">
+                                <select class="contact-input w-full px-4 py-3 outline-none appearance-none bg-transparent">
+                                    <option>Select Country</option>
+                                    <option>India</option>
+                                    <option>USA</option>
+                                </select>
+                                <div class="pointer-events-none absolute inset-y-0 right-4 flex items-center px-2 text-gray-700">
+                                    <i class="fas fa-caret-down"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="pt-4">
+                            <button type="button" class="px-10 py-3 bg-gray-900 text-white font-medium rounded-lg hover:bg-gray-800 transition-colors shadow-lg">
+                                Next
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Right Side: Abstract Art Image -->
+                <div class="hidden md:block md:w-1/2 relative bg-cover bg-center"
+                     style="background-image: url('https://images.unsplash.com/photo-1511920170033-f8396924c348?auto=format&fit=crop&w=1200&q=80');">
+                    <div class="absolute inset-0 bg-indigo-500 mix-blend-overlay opacity-20"></div>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-gray-900 text-gray-500 py-1 text-center text-sm border-t border-gray-800">
+        <p>&copy; 2026 RealEstate AI. All rights reserved.</p>
+        <div class="mt-2 space-x-4">
+            <a href="#" class="hover:text-white transition-colors">Privacy Policy</a>
+            <a href="#" class="hover:text-white transition-colors">Terms of Service</a>
+        </div>
+    </footer>
+
+    <script>
+        // Navigation Logic
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.section-content').forEach(s => {
+                s.classList.remove('active');
+                s.style.display = 'none'; // Ensure display none is applied
+            });
+            
+            // Show target section
+            const target = document.getElementById(sectionId + '-section');
+            if(target) { 
+                target.classList.add('active'); 
+                target.style.display = 'block'; // Force display block
+                window.scrollTo(0, 0); 
+            }
+            
+            // Update Nav Buttons
+            const buttons = document.querySelectorAll('.nav-link');
+            buttons.forEach(b => b.classList.remove('active'));
+            
+            // Map section IDs to button indices (Simple approach)
+            if(sectionId === 'home') buttons[0]?.classList.add('active');
+            if(sectionId === 'predict') buttons[1]?.classList.add('active');
+            if(sectionId === 'about') buttons[2]?.classList.add('active');
+            if(sectionId === 'contact') buttons[3]?.classList.add('active');
+        }
+
+        // Initialize view
+        showSection('home');
+
+        // Prediction Logic
+        async function handlePredict(event) {
+            event.preventDefault();
+            const form = document.getElementById('prediction-form');
+            const data = Object.fromEntries(new FormData(form).entries());
+            
+            const btnText = document.getElementById('btn-text');
+            const priceDisplay = document.getElementById('price-display');
+            const errorBox = document.getElementById('error-box');
+            const errorMessage = document.getElementById('error-message');
+            
+            // UI Loading State
+            const originalBtnText = btnText.innerText;
+            btnText.innerText = "Calculating...";
+            errorBox.classList.add('hidden');
+            priceDisplay.classList.add('animate-pulse'); // Add pulsing effect while loading
+
+            try {
+                // NOTE: This assumes your Flask backend is running on localhost:5000
+                const response = await fetch('http://127.0.0.1:5000/predict', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+                
+                if (result.predicted_price) {
+                    // Update the large price display
+                    // Format number as currency if it's a raw number
+                    let formattedPrice = result.predicted_price;
+                    if(!isNaN(formattedPrice)) {
+                         formattedPrice = "₹" + Number(formattedPrice).toLocaleString('en-IN');
+                    }
+                    priceDisplay.innerText = formattedPrice;
+                } else {
+                    errorMessage.innerText = "Error: " + (result.error || "Unknown error");
+                    errorBox.classList.remove('hidden');
+                }
+            } catch (error) {
+                console.error("Fetch error:", error);
+                
+                // --- DEMO MODE FOR PREVIEW ONLY ---
+                // (Remove this block in production to show real errors)
+                setTimeout(() => {
+                    // Simulate a random price for the UI demo
+                    const randomPrice = (Math.random() * 80 + 40).toFixed(2);
+                    priceDisplay.innerText = "₹" + randomPrice + " Lakhs";
+                    priceDisplay.classList.remove('animate-pulse');
+                }, 1000);
+                // ----------------------------------
+
+                // In production, uncomment below:
+                // errorMessage.innerText = "Server not reachable. Is Flask running?";
+                // errorBox.classList.remove('hidden');
+
+            } finally {
+                btnText.innerText = originalBtnText;
+                priceDisplay.classList.remove('animate-pulse');
+            }
+        }
+    </script>
+</body>
+</html>
